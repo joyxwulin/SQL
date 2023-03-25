@@ -28,7 +28,7 @@ SELECT Max(Sales) "Highest Number of Cookies Sold" from BakeShop;
 SELECT Min(Sales) "Lowest Number of Cookies Sold" from BakeShop;
 
 --What is the average number of sales of cookies?
-SELECT Avg(Sales) "Average Sales" FROM BakeShop;
+SELECT Avg(Sales) "Average Number of Sales" FROM BakeShop;
 
 --What are the top 5 sellers?
 SELECT Tray_number,cookie, price, sales from BakeShop
