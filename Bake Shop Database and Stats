@@ -18,37 +18,37 @@ INSERT INTO BakeShop values(15,"Oatmeal Raisin Cookie",15,3.99,52,"None",4);
 SELECT * FROM BakeShop 
 ORDER BY Cookie;
 
---What is the highest selling number of cookies + specific cookie?
+--Displays the highest selling number of cookies + specific cookie.
 SELECT Max(Sales) AS 'Highest Number of Cookies Sold',Cookie AS 'Fan Favorite'
 FROM BakeShop;
 
---What is the lowest selling number of cookies + specific cookie?
+--Displays the lowest selling number of cookies + specific cookie.
 SELECT Min(Sales) AS 'Lowest Number of Cookies Sold',Cookie AS 'Needs Re-Vamping'
 FROM BakeShop;
 
---Are the sales above average for each cookie?
+--Displays cookie sales that are aobve average.
 SELECT Cookie, Sales
 FROM BakeShop  
 WHERE Sales > (SELECT AVG(Sales)FROM BakeShop)
 ORDER BY Sales DESC;
 
---What are the top 5 sellers if a customer were to ask?
+--Displays the top 5 selling cookies. 
 SELECT Tray_number AS 'Tray',cookie, price, sales 
 FROM BakeShop
 ORDER BY sales desc
 LIMIT 5;
 
---What are the options for someone who is allergic to peanuts?
+--Displays options without peanuts.
 SELECT Cookie AS 'Non-Allergenic Option(s)'
 FROM BakeShop
 WHERE Allergen IN ('None');
 
---What are the options for someone who wants a vegan friendly option?
+--Displays options that are vegan. 
 SELECT Cookie AS 'Vegan Friendly Option(s)'
 FROM  BakeShop
 WHERE Allergen NOT IN ('Milk','Egg');
 
---What are the options for chocolate lovers?
+--Displays options for chocolate lovers?
 SELECT Cookie AS 'Chocolate Lover Option(s)'
 FROM BakeShop
 WHERE Cookie LIKE'%Chocolate%';
