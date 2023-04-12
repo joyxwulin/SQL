@@ -1,36 +1,54 @@
 --Create a bake shop data base
 
-CREATE TABLE BakeShop(id INTEGER PRIMARY KEY, Cookie TEXT, Tray_Number INTEGER, Price INTEGER, Sales INTEGER, Inventory_Left INTEGER);
+CREATE TABLE BakeShop(id INTEGER PRIMARY KEY, Cookie TEXT, Tray_Number INTEGER, Price INTEGER, Sales INTEGER, Allergen TEXT, Inventory_Left INTEGER);
 
-INSERT INTO BakeShop values(1,"Butter Cookie",1,1.99,80,100);
-INSERT INTO BakeShop values(2,"Chocolate Chip Cookie",2,1.99,60,80);
-INSERT INTO BakeShop values(3,"Sugar Cookie",3,1.99,55,70);
-INSERT INTO BakeShop values(4,"Fudge Cookie",4,2.99,20,60);
-INSERT INTO BakeShop values(5,"Double Chocolate Chip Cookie",5,3.99,7,50);
-INSERT INTO BakeShop values(6,"Ube Cookie",6,3.99,12,44);
-INSERT INTO BakeShop values(7,"Shortbread Cookie",7,2.99,32,45);
-INSERT INTO BakeShop values(8,"Peanutbutter Cookie",8,2.99,78,55);
-INSERT INTO BakeShop values(9,"Madeline",9,1.99,23,52);
-INSERT INTO BakeShop values(10,"Salted Caramel Cookie",10,2.99,92,31);
-INSERT INTO BakeShop values(11,"Seven Layer Cookie",11,4.99,47,72);
-INSERT INTO BakeShop values(12,"Coconut Macaroon",12,4.99,55,88);
-INSERT INTO BakeShop values(13,"Oreo Cookie",13,1.99,40,21);
-INSERT INTO BakeShop values(14,"Black & White Cookie",14,2.99,40,33);
-INSERT INTO BakeShop values(15,"Oatmeal Raisin Cookie",15,3.99,40,4);
+INSERT INTO BakeShop values(1,"Butter Cookie",1,1.99,40,"None",100);
+INSERT INTO BakeShop values(2,"Chocolate Chip Cookie",2,1.99,80,"Egg",80);
+INSERT INTO BakeShop values(3,"Sugar Cookie",3,1.99,60,"Egg",70);
+INSERT INTO BakeShop values(4,"Milk Chocolate Fudge Cookie",4,2.99,20,"Egg,Milk ",55);
+INSERT INTO BakeShop values(9,"Madeline",9,1.99,88,"Egg",52);
+INSERT INTO BakeShop values(10,"Salted Caramel Cookie",10,2.99,90,"Peanut",31);
+INSERT INTO BakeShop values(11,"Seven Layer Cookie",11,4.99,33,"Milk",72);
+INSERT INTO BakeShop values(12,"Coconut Macaroon",12,4.99,72,"None",88);
+INSERT INTO BakeShop values(13,"Deluxe Chocolate Chip Cookie",13,1.99,66,"Milk",21);
+INSERT INTO BakeShop values(14,"Black & White Cookie",14,2.99,19,"None",33);
+INSERT INTO BakeShop values(15,"Oatmeal Raisin Cookie",15,3.99,52,"None",4);
 
---Display the database by increasing price.
-SELECT * from BakeShop ORDER BY price asc;
+--Displays the database in alphabetical order.
+SELECT * FROM BakeShop 
+ORDER BY Cookie;
 
---What is the highest selling number of cookies? 
-SELECT Max(Sales) "Highest Number of Cookies Sold" from BakeShop;
+--What is the highest selling number of cookies + specific cookie?
+SELECT Max(Sales) AS 'Highest Number of Cookies Sold',Cookie AS 'Fan Favorite'
+FROM BakeShop;
 
---What is the lowest selling number of cookies?
-SELECT Min(Sales) "Lowest Number of Cookies Sold" from BakeShop;
+--What is the lowest selling number of cookies + specific cookie?
+SELECT Min(Sales) AS 'Lowest Number of Cookies Sold',Cookie AS 'Needs Re-Vamping'
+FROM BakeShop;
 
---What is the average number of sales of cookies?
-SELECT Avg(Sales) "Average Number of Sales" FROM BakeShop;
+--Are the sales above average for each cookie?
+SELECT Cookie, Sales
+FROM BakeShop  
+WHERE Sales > (SELECT AVG(Sales)FROM BakeShop)
+ORDER BY Sales DESC;
 
---What are the top 5 sellers?
-SELECT Tray_number,cookie, price, sales from BakeShop
+--What are the top 5 sellers if a customer were to ask?
+SELECT Tray_number AS 'Tray',cookie, price, sales 
+FROM BakeShop
 ORDER BY sales desc
-Limit 5
+LIMIT 5;
+
+--What are the options for someone who is allergic to peanuts?
+SELECT Cookie AS 'Non-Allergenic Option(s)'
+FROM BakeShop
+WHERE Allergen IN ('None');
+
+--What are the options for someone who wants a vegan friendly option?
+SELECT Cookie AS 'Vegan Friendly Option(s)'
+FROM  BakeShop
+WHERE Allergen NOT IN ('Milk','Egg');
+
+--What are the options for chocolate lovers?
+SELECT Cookie AS 'Chocolate Lover Option(s)'
+FROM BakeShop
+WHERE Cookie LIKE'%Chocolate%';
