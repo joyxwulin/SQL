@@ -35,7 +35,7 @@ ORDER BY Sales DESC;
 --Displays the top 5 selling cookies. 
 SELECT Tray_number AS 'Tray',cookie, price, sales 
 FROM BakeShop
-ORDER BY sales desc
+ORDER BY sales DESC
 LIMIT 5;
 
 --Displays options without peanuts.
