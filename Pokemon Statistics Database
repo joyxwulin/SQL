@@ -1,4 +1,4 @@
-# In this SQL, I'm querying Pokemon Statistics to help distinguish between the aptitude of the set of Pokemon
+# In this SQL, I'm querying Pokemon Statistics to help distinguish between the aptitude of the set of Pokemon.
 CREATE TABLE pokemon(
   Number     INTEGER,
   Name       TEXT PRIMARY KEY,
@@ -828,7 +828,7 @@ SELECT Name,MIN(Total) as 'Weakest Pokemon'FROM pokemon;
 #5: What is the average attack strength rounded to the nearest whole number?
 SELECT ROUND(AVG(Total)) as 'Average Strength'FROM pokemon;
 
-#6: This case will provide the name of each Pokemon and whether each Pokemon falls above, below, or is average in total attack strength. If they don't fall in any of the constraints, it will show as REJECT. 
+#6: Which Pokemon(s) fall above, below, or is average in total attack strength?
 SELECT name,Total, 
     CASE
         WHEN Total > 435 THEN "Above Average"
@@ -839,7 +839,7 @@ SELECT name,Total,
 FROM pokemon
 GROUP BY name,Total;
 
-#7: This case will count the number of Pokemon that fall above, below, or is average in total attack strength. 
+#7: How many Pokemon fall above, below, or is average in total attack strength. 
 SELECT COUNT(*) AS "Number of Pokemons", 
     CASE
         WHEN Total > 435 THEN "Above Average"
@@ -850,7 +850,7 @@ SELECT COUNT(*) AS "Number of Pokemons",
 FROM pokemon
 GROUP BY Averaging_Strength;
 
-#8: Which Type 1 Pokemon (s) have health points (HP) greater than the average health points of all the Pokemon?
+#8: Which Type 1 Pokemon(s) have health points (HP) greater than the average health points of all the Pokemon?
 SELECT Type_1 AS "Pokemon Type 1",ROUND(AVG(HP)) AS "Above_Average_Health_Points" FROM pokemon 
 GROUP BY Type_1
 HAVING Above_Average_Health_Points > 69;
