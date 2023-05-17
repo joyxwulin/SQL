@@ -1,4 +1,4 @@
-/* Create table about the people and what they do here */
+# In this SQL, I'm querying famous movie stars, their movies, and their partners.
 
 /*Movie Stars Table*/
 CREATE TABLE movie_stars (
