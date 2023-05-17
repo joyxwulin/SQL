@@ -1,0 +1,79 @@
+/* Create table about the people and what they do here */
+
+/*Movie Stars Table*/
+CREATE TABLE movie_stars (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    fullname TEXT,
+    age INTEGER);
+
+INSERT INTO movie_stars (fullname,age) VALUES ("Mila Kunis",39);
+INSERT INTO movie_stars (fullname,age) VALUES ("Ashton Kutcher",45);
+INSERT INTO movie_stars (fullname,age) VALUES ("Channing Tatum",43);
+INSERT INTO movie_stars (fullname,age) VALUES ("Jenna Dewan",42);
+INSERT INTO movie_stars (fullname,age) VALUES ("Anne Hathaway",40);
+INSERT INTO movie_stars (fullname,age) VALUES ("Megan Fox",37);
+INSERT INTO movie_stars (fullname,age) VALUES ("Tom Cruise",60);
+INSERT INTO movie_stars (fullname,age) VALUES ("Tom Holland",26);
+INSERT INTO movie_stars (fullname,age) VALUES ("Chris Evans",41); 
+INSERT INTO movie_stars (fullname,age) VALUES ("Johnny Depp",59);
+INSERT INTO movie_stars (fullname,age) VALUES ("Jennifer Lawrence",32);
+
+
+/*Movies the Stars were in Table*/
+CREATE TABLE movies(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    person_id INTEGER,
+    title TEXT,
+    release_year INTEGER);
+
+INSERT INTO movies (person_id,title,release_year) VALUES (1,"Bad Moms",2016);
+INSERT INTO movies (person_id,title,release_year) VALUES (1,"Friends with Benefits",2011);
+INSERT INTO movies (person_id,title,release_year) VALUES (2,"That 70's Show",1998);
+INSERT INTO movies (person_id,title,release_year) VALUES (2,"Two and a Half Men",2003);
+INSERT INTO movies (person_id,title,release_year) VALUES (3,"Magic Mike",2012);
+INSERT INTO movies (person_id,title,release_year) VALUES (3,"21 Jump Street",2012);
+INSERT INTO movies (person_id,title,release_year) VALUES (4,"Step Up",2006);
+INSERT INTO movies (person_id,title,release_year) VALUES (5,"Princess Diaries",2001); 
+INSERT INTO movies (person_id,title,release_year) VALUES (6,"Transformers",2007);
+INSERT INTO movies (person_id,title,release_year) VALUES (7,"Mission Impossible",1996); 
+INSERT INTO movies (person_id,title,release_year) VALUES (8,"Spider-Man: No Way Home",2021);
+INSERT INTO movies (person_id,title,release_year) VALUES (8,"Uncharted",2022);
+INSERT INTO movies (person_id,title,release_year) VALUES (8,"The Impossible",2012);
+INSERT INTO movies (person_id,title,release_year) VALUES (8,"Avengers:End Game",2019);
+INSERT INTO movies (person_id,title,release_year) VALUES (9,"Captain America: The First Avenger",2011); 
+INSERT INTO movies (person_id,title,release_year) VALUES (10,"Edward Scissorhands",1990); 
+INSERT INTO movies (person_id,title,release_year) VALUES (11,"The Hunger Games",2012);
+
+
+/*Movie Star Couples Table*/
+CREATE TABLE couples (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    personid_1 INTEGER,
+    personid_2 INTEGER);
+    
+INSERT INTO couples (personid_1,personid_2) VALUES (1,2);
+INSERT INTO couples (personid_1,personid_2) VALUES (3,4);
+
+/*What are all the movie_stars + their full name and age?*/
+SELECT * FROM movie_stars;
+
+/*What are the movies each movie star has been in?*/
+SELECT a.fullname,b.title,b.release_year
+FROM movie_stars a
+JOIN movies b
+ON a.id = b.person_id
+ORDER BY release_year desc;
+
+/*How many movies has each movie star been in?*/
+SELECT COUNT(*) AS "Number of Movies",fullname
+FROM movie_stars a
+JOIN movies b
+ON a.id = b.person_id
+GROUP BY fullname;
+
+/*Which movie stars are couples?*/
+SELECT a.fullname,b.fullname FROM couples
+JOIN movie_stars a
+ON couples.personid_1 = a.id
+JOIN movie_stars b
+ON couples.personid_2 = b.id
