@@ -1,4 +1,5 @@
 # In this SQL, I'm querying Pokemon Statistics to help distinguish between the aptitude of the set of Pokemon.
+
 CREATE TABLE pokemon(
   Number     INTEGER,
   Name       TEXT PRIMARY KEY,
@@ -815,20 +816,20 @@ INSERT INTO pokemon(Number,Name,Type_1,Type_2,Total,HP,Attack,Defense,Sp_Atk,Sp_
 INSERT INTO pokemon(Number,Name,Type_1,Type_2,Total,HP,Attack,Defense,Sp_Atk,Sp_Def,Speed,Generation,Legendary) VALUES (720,'HoopaHoopa Unbound','Psychic','Dark',680,80,160,60,170,130,80,6,'True');
 INSERT INTO pokemon(Number,Name,Type_1,Type_2,Total,HP,Attack,Defense,Sp_Atk,Sp_Def,Speed,Generation,Legendary) VALUES (721,'Volcanion','Fire','Water',600,80,110,120,130,90,70,6,'True');
 
-#2: What is the total count of rows, which can also be viewed as the total number of Pokemon in the dataset?
+/*What is the total count of rows, which can also be viewed as the total number of Pokemon in the dataset*/
 SELECT COUNT(*) AS "Total Number of Pokemons"
 FROM pokemon;
 
-#3: Who is the strongest Pokemon + their total attack strength?
+/*Who is the strongest Pokemon + their total attack strength?*/
 SELECT Name,MAX(Total) as 'Strongest Pokemon'FROM pokemon;
 
-#4: Who is the weakest Pokemon + their total attack strength?
+/*Who is the weakest Pokemon + their total attack strength?*/
 SELECT Name,MIN(Total) as 'Weakest Pokemon'FROM pokemon;
 
-#5: What is the average attack strength rounded to the nearest whole number?
+/*What is the average attack strength rounded to the nearest whole number?*/
 SELECT ROUND(AVG(Total)) as 'Average Strength'FROM pokemon;
 
-#6: Which Pokemon(s) fall above, below, or is average in total attack strength?
+/*Which Pokemon(s) fall above, below, or is average in total attack strength*/
 SELECT name,Total, 
     CASE
         WHEN Total > 435 THEN "Above Average"
@@ -839,7 +840,7 @@ SELECT name,Total,
 FROM pokemon
 GROUP BY name,Total;
 
-#7: How many Pokemon fall above, below, or is average in total attack strength. 
+/*How many Pokemon fall above, below, or is average in total attack strength*/ 
 SELECT COUNT(*) AS "Number of Pokemons", 
     CASE
         WHEN Total > 435 THEN "Above Average"
@@ -850,12 +851,12 @@ SELECT COUNT(*) AS "Number of Pokemons",
 FROM pokemon
 GROUP BY Averaging_Strength;
 
-#8: Which Type 1 Pokemon(s) have health points (HP) greater than the average health points of all the Pokemon?
+/*Which Type 1 Pokemon(s) have health points (HP) greater than the average health points of all the Pokemon*/
 SELECT Type_1 AS "Pokemon Type 1",ROUND(AVG(HP)) AS "Above_Average_Health_Points" FROM pokemon 
 GROUP BY Type_1
 HAVING Above_Average_Health_Points > 69;
 
-#9: Which Pokemon(s) are legendary with a Type 1 of water,fire or ice AND have a Type 2 that removes any NULL inputs AND have health points greater than the average health points of all the Pokemons 
+/*Which Pokemon(s) fall under the constraints?*/ 
 SELECT * FROM pokemon
 WHERE Type_1 IN ('Water','Fire','Ice') AND Type_2 NOT IN ('NULL') AND HP > 69 AND Legendary = "True"
 ORDER BY Total desc;
