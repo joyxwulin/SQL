@@ -1,6 +1,6 @@
 #In this SQL, I'm querying a database to quantify statistics about a Cookie Bake Shop's sales. 
 
-#1: A table is created using per cookie item information.
+/*Cookie Table*/
 CREATE TABLE Cookie_BakeShop (id INTEGER PRIMARY KEY, Cookie TEXT, Tray INTEGER, Price_USD INTEGER, Vegan_Friendly TEXT, Allergens TEXT, Weekly_Sales INTEGER);
 
 INSERT INTO Cookie_BakeShop VALUES(1,"Chocolate Chip Cookie",1,2.99,"NO","Eggs , Milk",52);
@@ -24,30 +24,31 @@ INSERT INTO Cookie_BakeShop VALUES(18,"Red Velvet Cookie",4,2.50,"NO","Eggs , Mi
 INSERT INTO Cookie_BakeShop VALUES(19,"Thin Mint Cookie",2,2.99,"YES","NONE",19);
 INSERT INTO Cookie_BakeShop VALUES(20,"Oreo Cheesecake Cookie",6,3.99,"YES","NONE",48);
 
+/*Display all values in Cookie Table*/
 SELECT * FROM Cookie_BakeShop;
 
-#2: What is the weekly dollar sales, rounded to the nearest dollar, of each cookie?
+/*What is the weekly dollar sales, rounded to the nearest dollar, of each cookie?*/
 SELECT Tray,Cookie,Price_USD AS "Price",ROUND(Price_USD)*Weekly_Sales AS "Total Sales"FROM Cookie_BakeShop
 ORDER BY Price_USD desc;
 
-#3: What is the total number of cookies sold for the week?
+/*What is the total number of cookies sold for the week?*/
 SELECT SUM(Weekly_Sales) AS "Total Sales for the Week" FROM Cookie_BakeShop;
 
-#4: What is the best selling cookie this week?
+/*What is the best selling cookie this week?*/
 SELECT Tray,Cookie,MAX(Weekly_Sales) AS "Best Selling Cookie" FROM Cookie_BakeShop;
 
-#5: What are the top 5 cookies sold this week?
+/*What are the top 5 cookies sold this week?*/
 SELECT Tray,Cookie AS "Top 5 Cookies" FROM Cookie_BakeShop 
 ORDER BY Weekly_Sales desc
 LIMIT 5;
 
-#6: What is the lowest selling cookie that needs revamping?
+/*What is the lowest selling cookie that needs revamping?*/
 SELECT Tray,Cookie,MIN(Weekly_Sales) AS "Lowest Selling Cookie" FROM Cookie_BakeShop;
 
-#7: What are the vegan friendly options?
+/*What are the vegan friendly options?*/
 SELECT Cookie,Vegan_Friendly AS "Vegan Friendly" FROM Cookie_BakeShop 
 WHERE Vegan_Friendly="YES";
 
-#8: How many cookies fall under each allergen (eggs, milk, nuts, or none)?
+/*How many cookies fall under each allergen?*/
 SELECT Allergens,COUNT(*) AS "Option Quantity" FROM Cookie_BakeShop
 GROUP BY Allergens;
