@@ -33,13 +33,13 @@ LIMIT 1;
 /*What is the total revenue of the specific products sold in Janurary?*/
 SELECT
 Product,
-sum(Quantity) * price AS Revenue
+SUM(Quantity) * price AS Revenue
 FROM BIT_DB.JanSales
 GROUP BY Product;
 
 /*Product(s) sold to the specific location- 548 Lincoln St, Seattle, WA 98101?, how many of each product(s) sold, and the total revenue for the product(s)?*/
 SELECT 
-SUM (Quantity),
+SUM(Quantity),
 Product,
 SUM(Quantity) * price AS Revenue
 FROM BIT_DB.FebSales
@@ -59,9 +59,55 @@ AND orderID <> 'Order ID';
 
 /*Which products and how many of each product were sold to a location in Los Angeles in Februrary?*/
 SELECT
-product, 
-sum(Quantity) AS 'Total Quantity',
+Product, 
+SUM(Quantity) AS 'Total Quantity',
 location
 FROM BIT_DB.FebSales
 WHERE location LIKE'%Los Angeles%'
 GROUP BY product;
+
+/*Which locations in New York received atleast three orders and how many orders did they each receive in Janurary?*/
+SELECT
+DISTINCT location, 
+COUNT(orderID)
+FROM BIT_DB.JanSales
+WHERE location LIKE '%NY%'
+AND Length(orderID) = 6
+AND orderID <> 'ORDER ID'
+HAVING count(orderID) >= 3;
+
+/*How many of each headphone(s) were sold in February?*/
+SELECT
+Product, 
+SUM(quantity) AS 'Total Quantity' 
+FROM BIT_DB.FebSales
+WHERE Product LIKE '%Headphones%'
+GROUP BY Product; 
+
+/*What is the average amount spent per account in February?*/
+SELECT 
+AVG(quantity*price)
+FROM BIT_DB.FebSales sales 
+LEFT JOIN BIT_DB.customers customers
+ON sales.orderID = customers.order_id
+WHERE Length(orderID) = 6
+AND orderID <> 'Order ID';
+
+/*What is the average quantity of products bought per account in February?*/
+SELECT 
+SUM(quantity)/COUNT(customers.acctnum)
+FROM BIT_DB.FebSales sales 
+LEFT JOIN BIT_DB.customers
+ON sales.orderID = customers.order_id
+WHERE Length(orderID) = 6
+AND orderID <> 'Order ID';
+
+/*What product brought in the most revenue and how much total revunue was brought in, in Janurary?*/
+SELECT 
+Product, 
+SUM(Quantity*price) AS Total_Revenue 
+FROM BIT_DB.JanSales
+GROUP BY Product
+ORDER BY Total_Revenue DESC
+LIMIT 1; 
+
