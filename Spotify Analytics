@@ -98,7 +98,22 @@ GROUP BY artist_name,track_name;
 SELECT 
 COUNT(CASE WHEN instrumentalness > 0 THEN 1 END) AS "Songs with Instrumentalnes"
 FROM Spotifydata
-WHERE Instrumentalness > 0 
+WHERE Instrumentalness > 0;
+
+WITH average_popularity_CTE AS(
+SELECT 
+S.artist_name,
+AVG(S.popularity) AS average_popularity
+FROM Spotifydata S
+GROUP BY S.artist_name
+)
+
+SELECT 
+artist_name,
+average_popularity,
+'Top Star' AS tag
+FROM average_popularity_CTE
+WHERE average_popularity >=90; 
 
 
 
