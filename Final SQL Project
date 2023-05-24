@@ -1,0 +1,171 @@
+#In this SQL, I'm querying a dataset called Chinook, which represents a digital media store. The dataset includes tables for artists, albums, media, and customers. 
+#I am performing SQL analytics to quantify invoice, customer, and employee information about the digital media store. 
+
+/*Which customers are not in the US?*/ 
+SELECT
+CustomerID,
+FirstName ||' '|| LastName AS FullName, 
+Country
+FROM chinook.customers
+WHERE Country <> 'USA'
+ORDER BY Country ASC;
+
+/*Which customers are from Brazil?*/
+SELECT 
+CustomerID,
+FirstName ||' '|| LastName AS FullName, 
+Country 
+FROM chinook.customers 
+WHERE Country = 'Brazil';
+
+/*What are the invoices of the customers who are from Brazil?*/
+SELECT 
+cust.FirstName ||' '|| LastName AS FullName,
+inv.InvoiceID,
+inv.InvoiceDate,
+inv.BillingCountry
+FROM chinook.customers cust
+LEFT JOIN chinook.invoices inv
+ON cust.CustomerID = inv.CustomerID
+WHERE BillingCountry = 'Brazil';
+
+/*Which employees are Sales Agents?*/
+SELECT
+EmployeeId,
+FirstName ||' '|| LastName AS FullName, 
+Title
+FROM chinook.employees
+WHERE title LIKE '%Agent%';
+
+/*A distinct list of all the invoice billing countries*/
+SELECT 
+DISTINCT BillingCountry 
+FROM chinook.Invoices;
+
+
+/*What are the invoices associated with the Sales Agents*/
+SELECT 
+EmployeeId,
+a.FirstName ||' '|| a.LastName AS FullName, 
+Title, 
+InvoiceDate
+FROM chinook.employees a
+JOIN chinook.customers b 
+ON b.SupportRepId = a.EmployeeId
+JOIN chinook.invoices c
+ON c.Customerid = b.Customerid;
+
+/*How many invoices are associated with the Sales Agents*/
+SELECT 
+EmployeeId,
+a.FirstName ||' '|| a.LastName AS FullName, 
+Title, 
+COUNT(InvoiceDate) AS 'Number of Invoices'
+FROM chinook.employees a
+JOIN chinook.customers b 
+ON b.SupportRepId = a.EmployeeId
+JOIN chinook.invoices c
+ON c.Customerid = b.Customerid
+GROUP BY EmployeeId;
+
+/*Which eployees provided which customers with invoices, the location of,country, and total of the invoices?*/
+SELECT 
+a.FirstName ||' '|| a.LastName AS Employee_Full_Name,
+a.Title AS 'Employee Title',
+b.FirstName ||' '|| b.FirstName AS Customer_Full_Name,
+b.Country,
+c.total
+FROM chinook.employees a
+JOIN chinook.customers b 
+ON b.SupportRepID = a.EmployeeId
+JOIN chinook.invoices c
+ON c.Customerid = b.Customerid
+ORDER BY Employee_Full_Name ASC; 
+
+/*How many invoices were made in 2009?*/
+SELECT
+COUNT(*) AS '2009: Number of Invoices'
+FROM chinook.invoices
+WHERE Invoicedate LIKE '%2009%';
+
+/*What are the total sales for 2009?*/
+SELECT
+ROUND(SUM(Total),2) AS '2009: Total Sales'
+FROM chinook.invoices
+WHERE Invoicedate LIKE '%2009%';
+
+/*What purchased track is associated with each invoice?*/
+SELECT
+InvoiceLineId, 
+Tracks.Name
+FROM chinook.invoice_items items 
+JOIN chinook.invoices inv
+ON inv.invoiceid = items.invoiceid
+JOIN chinook.tracks tracks
+ON tracks.Trackid = items.Trackid
+ORDER BY InvoiceLineID ASC; 
+
+/*What purchased track and artist is associated with each invoice?*/
+SELECT 
+InvoiceLineId, 
+Tracks.Name,
+Tracks.Composer
+FROM chinook.invoice_items items 
+JOIN chinook.invoices inv
+ON inv.invoiceid = items.invoiceid
+JOIN chinook.tracks tracks
+ON tracks.Trackid = items.Trackid
+ORDER BY InvoiceLineID ASC;
+
+/*What is the media type and genre of each track, and what album does each track belong to?*/
+SELECT
+albums.Title AS AlbumName,
+tracks.Name AS 'Track Name',
+types.Name AS 'Media Type',
+genres.Name AS 'Genre'
+FROM chinook.tracks tracks 
+JOIN chinook.media_types types
+ON types.MediaTypeid = tracks.MediaTypeid
+JOIN chinook.genres genres 
+ON genres.Genreid = tracks.Genreid
+JOIN chinook.albums albums
+ON albums.Albumid = tracks.albumid
+ORDER BY AlbumName ASC;
+
+/*How many tracks belong to each album?*/
+SELECT
+COUNT(*),
+albums.title AS AlbumName
+FROM chinook.tracks tracks 
+JOIN chinook.media_types types
+ON types.MediaTypeid = tracks.MediaTypeid
+JOIN chinook.genres genres 
+ON genres.Genreid = tracks.Genreid
+JOIN chinook.albums albums
+ON albums.Albumid = tracks.albumid
+GROUP BY AlbumName;
+
+/*What are the total sales made by each sales agent?*/
+SELECT 
+a.FirstName ||' '|| a.LastName AS Employee_Full_Name,
+ROUND(SUM(c.total),2) AS 'Total Sales'
+FROM chinook.employees a
+JOIN chinook.customers b 
+ON b.SupportRepID = a.EmployeeId
+JOIN chinook.invoices c
+ON c.Customerid = b.Customerid
+GROUP BY Employee_Full_Name;
+
+/*Which sales agent made the most dollar sales in 2009?*/
+SELECT 
+a.FirstName ||' '|| a.LastName AS Employee_Full_Name,
+ROUND(SUM(c.total),2) AS TotalSales
+FROM chinook.employees a
+JOIN chinook.customers b 
+ON b.SupportRepID = a.EmployeeId
+JOIN chinook.invoices c
+ON c.Customerid = b.Customerid
+WHERE c.Invoicedate LIKE '%2009%'
+GROUP BY Employee_Full_Name
+ORDER BY TotalSales DESC
+LIMIT 1;
